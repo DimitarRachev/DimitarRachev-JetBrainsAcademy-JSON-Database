@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
-    String[] database;
+    Map<String, String> database;
     String address;
     int port;
     ServerSocket serverSocket;
@@ -24,7 +26,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        database = new String[1000];
+        database = new HashMap<>();
     }
 
     String start() {
@@ -37,11 +39,6 @@ public class Server {
             e.printStackTrace();
         }
         return null;
-    }
-
-
-    public boolean indexIsValid(int index) {
-        return index >= 0 && index < database.length;
     }
 
     public String readInput() {
@@ -63,27 +60,36 @@ public class Server {
         return null;
     }
 
-    public String setData(int index, String data) {
-        if (indexIsValid(index)) {
-            database[index] = data;
-            return "OK";
-        }
-        return "ERROR";
+    public Response setData(String key, String data) {
+        database.put(key, data);
+        Response response = new Response();
+        response.setResponse("OK");
+        return response;
     }
 
-    public String getData(int index) {
-        if (indexIsValid(index) && database[index] != null) {
-            return database[index];
+    public Response getData(String key) {
+        String value = database.get(key);
+        Response response = new Response();
+        if (value != null) {
+            response.setResponse("OK");
+            response.setValue(value);
+        } else {
+            response.setResponse("ERROR");
+            response.setReason("No such key");
         }
-        return "ERROR";
+        return response;
     }
 
-    public String deleteData(int index) {
-        if (indexIsValid(index)) {
-            database[index] = null;
-            return "OK";
+    public Response deleteData(String key) {
+        Response response = new Response();
+       String value = database.remove(key);
+        if (value != null) {
+            response.setResponse("OK");
+        } else {
+            response.setResponse("ERROR");
+            response.setReason("No such key");
         }
-        return "ERROR";
+        return response;
     }
 
     public String shutdown() {

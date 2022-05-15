@@ -2,21 +2,27 @@ package client;
 
 
 import com.beust.jcommander.JCommander;
+import com.google.gson.Gson;
 
-//import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
         Client client = new Client();
         client.start();
+
+
         CommandParams commandParams = new CommandParams();
         JCommander.newBuilder().addObject(commandParams).build().parse(args);
-
-        String command = commandParams.getCommand();
+        String type = commandParams.getCommand();
+        String key = commandParams.getKey();
         String data = String.join(" ", commandParams.getData());
-        int index = commandParams.getIndex();
-        String forSending = command + "@" + index + "@" + data;
+        if (data.equals("")) {
+            data = null;
+        }
+
+        Request request = new Request(type, key, data);
+        String forSending = new Gson().toJson(request);
 
         System.out.println("Sent: " + client.sendData(forSending));
         System.out.println("Received: " + client.readData());

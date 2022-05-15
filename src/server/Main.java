@@ -1,27 +1,30 @@
 package server;
 
 
+import com.google.gson.Gson;
+
 public class Main {
 
     public static void main(String[] args) {
 
+        Gson gson = new Gson();
         Server server = new Server();
         System.out.println("Server started!");
         while (true) {
             server.start();
 
-            String[] command = server.readInput().split("@");
-            int index = Integer.parseInt(command[1]);
-            switch (command[0]) {
+            Request request = gson.fromJson(server.readInput(), Request.class);
+            String key = request.getKey();
+            switch (request.getType()) {
                 case "get":
-                    server.send(server.getData(index));
+                    server.send(gson.toJson(server.getData(key)));
                     break;
                 case "set":
-                    String data = command[2];
-                    server.send(server.setData(index, data));
+                    String data = request.getValue();
+                    server.send(gson.toJson(server.setData(key, data)));
                     break;
                 case "delete":
-                    server.send(server.deleteData(index));
+                    server.send(gson.toJson(server.deleteData(key)));
                     break;
                 case "exit":
                     server.shutdown();

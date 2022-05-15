@@ -13,15 +13,15 @@ public class CommandParams {
         return command;
     }
 
-    @Parameter(names = "-i")
-    private int index = 1;
+    @Parameter(names = "-k")
+    private  String key;
 
-    public Integer getIndex() {
-        return index;
+    public String getKey() {
+        return key;
     }
 
-    @Parameter(names = "-m")
-    private List<String> data = new ArrayList<>();
+    @Parameter(names = "-v")
+    private  List<String> data = new ArrayList<>();
 
     public List<String> getData() {
         return data;
