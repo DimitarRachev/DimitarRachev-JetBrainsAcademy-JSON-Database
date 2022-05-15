@@ -1,14 +1,25 @@
 package client;
 
-import java.util.Scanner;
+
+import com.beust.jcommander.JCommander;
+
+//import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
         Client client = new Client();
         client.start();
+        CommandParams commandParams = new CommandParams();
+        JCommander.newBuilder().addObject(commandParams).build().parse(args);
 
-        Scanner scanner = new Scanner(System.in);
+        String command = commandParams.getCommand();
+        String data = String.join(" ", commandParams.getData());
+        int index = commandParams.getIndex();
+        String forSending = command + "@" + index + "@" + data;
+
+        System.out.println("Sent: " + client.sendData(forSending));
+        System.out.println("Received: " + client.readData());
 
 //        while (true) {
 //            String[] input = scanner.nextLine().split("\\s+");
@@ -37,8 +48,8 @@ public class Main {
 //                    break;
 //                case "exit":
 //                    client.sendData("exit");
-//                    System.out.println("Exiting ");
-//                    System.exit(0);
+////                    System.out.println("Exiting ");
+////                    System.exit(0);
 //                    break;
 //            }
 //        }

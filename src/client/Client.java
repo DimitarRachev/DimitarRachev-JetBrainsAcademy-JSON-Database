@@ -47,6 +47,7 @@ public class Client {
     String sendData(String s) {
         try {
             output.writeUTF(s);
+            return s;
         } catch (IOException e) {
             e.printStackTrace();
         }

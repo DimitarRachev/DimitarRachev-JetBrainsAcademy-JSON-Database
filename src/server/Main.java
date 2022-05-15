@@ -7,11 +7,28 @@ public class Main {
 
         Server server = new Server();
         System.out.println("Server started!");
-        server.start();
+        while (true) {
+            server.start();
 
-        System.out.println("Received: " + server.readInput());
-        System.out.println("Sent: " + server.send("A record # 12 was sent!"));
-
+            String[] command = server.readInput().split("@");
+            int index = Integer.parseInt(command[1]);
+            switch (command[0]) {
+                case "get":
+                    server.send(server.getData(index));
+                    break;
+                case "set":
+                    String data = command[2];
+                    server.send(server.setData(index, data));
+                    break;
+                case "delete":
+                    server.send(server.deleteData(index));
+                    break;
+                case "exit":
+                    server.shutdown();
+                    System.exit(0);
+                    break;
+            }
+        }
 //        while (!"exit".equals(line)) {
 //            String[] input = line.split("\\s+");
 //            String command = input[0];

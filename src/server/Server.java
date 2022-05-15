@@ -63,17 +63,27 @@ public class Server {
         return null;
     }
 
-    public void setData(int index, String data) {
-        database[index] = data;
+    public String setData(int index, String data) {
+        if (indexIsValid(index)) {
+            database[index] = data;
+            return "OK";
+        }
+        return "ERROR";
     }
 
     public String getData(int index) {
-        return database[index];
+        if (indexIsValid(index) && database[index] != null) {
+            return database[index];
+        }
+        return "ERROR";
     }
 
     public String deleteData(int index) {
-        database[index] = null;
-        return "Record # " + (index + 1) + "was deleted";
+        if (indexIsValid(index)) {
+            database[index] = null;
+            return "OK";
+        }
+        return "ERROR";
     }
 
     public String shutdown() {
