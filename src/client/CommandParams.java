@@ -14,16 +14,23 @@ public class CommandParams {
     }
 
     @Parameter(names = "-k")
-    private  String key;
+    private String key;
 
     public String getKey() {
         return key;
     }
 
     @Parameter(names = "-v")
-    private  List<String> data = new ArrayList<>();
+    private String data;
 
-    public List<String> getData() {
+    public String getData() {
         return data;
+    }
+
+    @Parameter(names = "-in")
+    private String name;
+
+    public String getName() {
+        return name;
     }
 }

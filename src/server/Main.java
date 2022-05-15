@@ -3,34 +3,44 @@ package server;
 
 import com.google.gson.Gson;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+
 public class Main {
 
     public static void main(String[] args) {
 
         Gson gson = new Gson();
+        ExecutorService executor = Executors.newFixedThreadPool((Runtime.getRuntime().availableProcessors()));
         Server server = new Server();
         System.out.println("Server started!");
         while (true) {
-            server.start();
 
-            Request request = gson.fromJson(server.readInput(), Request.class);
-            String key = request.getKey();
-            switch (request.getType()) {
-                case "get":
-                    server.send(gson.toJson(server.getData(key)));
-                    break;
-                case "set":
-                    String data = request.getValue();
-                    server.send(gson.toJson(server.setData(key, data)));
-                    break;
-                case "delete":
-                    server.send(gson.toJson(server.deleteData(key)));
-                    break;
-                case "exit":
-                    server.shutdown();
-                    System.exit(0);
-                    break;
-            }
+                executor.submit(() -> {
+                    server.start();
+
+                    Request request = gson.fromJson(server.readInput(), Request.class);
+                    String key = request.getKey();
+                    switch (request.getType()) {
+                        case "get":
+                            server.send(gson.toJson(server.getData(key)));
+                            break;
+                        case "set":
+                            String data = request.getValue();
+                            server.send(gson.toJson(server.setData(key, data)));
+                            break;
+                        case "delete":
+                            server.send(gson.toJson(server.deleteData(key)));
+                            break;
+                        case "exit":
+                            executor.shutdownNow();
+                            server.shutdown();
+                            System.exit(0);
+                            break;
+                    }
+                });
+
         }
 //        while (!"exit".equals(line)) {
 //            String[] input = line.split("\\s+");
