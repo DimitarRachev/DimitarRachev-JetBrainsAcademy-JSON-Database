@@ -35,13 +35,13 @@ public class Main {
                             break;
                         case "exit":
                             executor.shutdownNow();
-                            server.shutdown();
+                            System.out.println(server.shutdown());
                             System.exit(0);
                             break;
                     }
                 });
-
         }
+
 //        while (!"exit".equals(line)) {
 //            String[] input = line.split("\\s+");
 //            String command = input[0];
