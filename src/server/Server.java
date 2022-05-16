@@ -28,7 +28,7 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port, 50, InetAddress.getByName(address));
             gson = new Gson();
-            Path path = Path.of("./JSON Database/task/src/server/data/db.json");
+            Path path = Path.of("F:\\JSON Database\\JSON Database\\task\\src\\server\\data\\db.json");
             db = new File(String.valueOf(path));
             database = readDataBase();
         } catch (IOException e) {
@@ -46,6 +46,12 @@ public class Server {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            try {
+                db.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return temp;
     }
@@ -55,8 +61,6 @@ public class Server {
             socket = serverSocket.accept();
             input = new DataInputStream(socket.getInputStream());
             output = new DataOutputStream(socket.getOutputStream());
-
-
             return "Server started!";
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,13 +121,15 @@ public class Server {
         return response;
     }
 
-    public String shutdown() {
+    public Response shutdown() {
         try {
             serverSocket.close();
             socket.close();
             input.close();
             output.close();
-            return "Exiting";
+            Response response = new Response();
+            response.setResponse("OK");
+            return response;
         } catch (IOException e) {
             e.printStackTrace();
         }

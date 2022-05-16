@@ -1,2 +1,0 @@
-# JetBrainsAcademy-JSON-Database
- 

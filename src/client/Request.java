@@ -16,7 +16,7 @@ public class Request {
     }
 
     public String getKey() {
-        return key;
+        return key.replace("\"", "");
     }
 
     public String getValue() {

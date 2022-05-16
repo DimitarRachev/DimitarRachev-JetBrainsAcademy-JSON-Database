@@ -14,8 +14,9 @@ public class Main {
     public static void main(String[] args) {
         Client client = new Client();
         client.start();
-
-
+//      2 lines sending exit command for debugging
+//        Request debug = new Request("exit", null, null);
+//        System.out.println(client.sendData(new Gson().toJson(debug)));
         CommandParams commandParams = new CommandParams();
         JCommander.newBuilder().addObject(commandParams).build().parse(args);
 
@@ -27,6 +28,7 @@ public class Main {
             String data = commandParams.getData();
 
             Request request = new Request(type, key, data);
+
             forSending = new Gson().toJson(request);
             System.out.println("Sent: " + client.sendData(forSending));
 
@@ -43,42 +45,6 @@ public class Main {
                 e.printStackTrace();
             }
         }
-
-
         System.out.println("Received: " + client.readData());
-
-//        while (true) {
-//            String[] input = scanner.nextLine().split("\\s+");
-//            String command = input[0];
-//            int index = Integer.parseInt(input[1]) - 1;
-//            if (!indexIsValid(index)) {
-//                System.out.println("ERROR");
-//                continue;
-//            }
-//            switch (command) {
-//                case "set":
-//                    String data = line.substring(line.indexOf(input[1]) + input[1].length());
-//                    database[index] = data;
-//                    System.out.println("OK");
-//                    break;
-//                case "get":
-//                    if (database[index] == null) {
-//                        System.out.println("ERROR");
-//                    } else {
-//                        System.out.println(database[index]);
-//                    }
-//                    break;
-//                case "delete":
-//                    database[index] = null;
-//                    System.out.println("OK");
-//                    break;
-//                case "exit":
-//                    client.sendData("exit");
-////                    System.out.println("Exiting ");
-////                    System.exit(0);
-//                    break;
-//            }
-//        }
-
     }
 }
